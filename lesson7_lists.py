@@ -12,4 +12,4 @@ count_max = 0
 for i in range(1, len(list_numbers) - 1):
     if list_numbers[i] > list_numbers[i - 1] and list_numbers[i] > list_numbers[i + 1]:
         count_max += 1
-print("Количество чисел, которые больше своих сосдей: ", count_max)
+print("Количество чисел, которые больше своих сосeдей: ", count_max)
