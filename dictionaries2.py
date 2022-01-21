@@ -1,4 +1,5 @@
-import random, string
+import random
+import string
 
 # Создаем словарь 1, где случайные маленькие буквы - это ключи, а случайные числа - это значения
 dict1 = {random.choice(string.ascii_lowercase): random.randint(0, 10) for i in range(10)}
@@ -15,4 +16,3 @@ dict3 = {**dict1, **dict2}
 # заменяем в общем словаре одинаковые ключи максимальными значения со словаря 1
 dict3.update({k: dict1[k] for k in dict1 if k in dict2 and dict1[k] > dict2[k]})
 print(dict3)
-
