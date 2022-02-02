@@ -1,6 +1,5 @@
 def authenticate() -> bool:
     """
-
     :return: bool
     """
     return True
@@ -29,7 +28,6 @@ def decorator(func):
 @decorator
 def login(username: str, password: str) -> bool:
     """
-
     :param username: str
     :param password: str
     :return: bool
