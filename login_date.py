@@ -5,6 +5,7 @@ dict_password = {"a": "1111", "b": "2222", "c": "3333"}
 
 n_minutes = 5
 
+
 def authenticate() -> bool:
     """
 
@@ -31,6 +32,7 @@ def decorator(func):
         if not authenticate():
             return False
         return func(user_main, password_main)
+
     return wrapper
 
 
@@ -96,6 +98,7 @@ def save_last_fail_login():
     """
     return datetime.datetime(day=9, month=2, year=2022, hour=20, minute=20)
 
+
 def user_blocking():
     """
     The function blocks the program for (n_minutes) minutes in case of incorrectly entered login
@@ -103,7 +106,8 @@ def user_blocking():
     """
     if not check_date(save_last_fail_login()):
         print(f"Вы заблокированы! Следующая попытка через {n_minutes} минут")
-        time.sleep(60*n_minutes)
+        time.sleep(60 * n_minutes)
+
 
 def main():
     """
