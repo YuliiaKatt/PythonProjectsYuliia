@@ -5,14 +5,15 @@ dict_password = {"a": "1111", "b": "2222", "c": "3333"}
 n_minutes = 5
 
 
-def authenticate(date) -> bool:
+def authenticate(user) -> bool:
     """
     The function blocks the program for (n_minutes) minutes in case of incorrectly entered login
     :return: bool
     """
-    if date > datetime.datetime.now() - datetime.timedelta(minutes=n_minutes):
-        print(f"Вы заблокированы! Следующая попытка через {n_minutes} минут")
-        exit()
+    for key,value in save_last_fail_login().items():
+        if key == user and value > datetime.datetime.now() - datetime.timedelta(minutes=n_minutes):
+            print(f"Вы заблокированы! Следующая попытка через {n_minutes} минут")
+            exit()
     return True
 
 
@@ -29,9 +30,9 @@ def check_password(username: str, password: str) -> bool:
 
 def decorator(func):
     def wrapper(user_main, password_main):
-        if not authenticate(save_last_fail_login()):
-            return False
         if not check_password(user_main, password_main):
+            return False
+        if not authenticate(user_main):
             return False
         return func(user_main, password_main)
 
@@ -87,7 +88,9 @@ def save_last_fail_login():
     The function saves the time of the last incorrectly entered login
     :return: datetime
     """
-    return datetime.datetime.now() - datetime.timedelta(minutes=n_minutes - 1)
+    date = datetime.datetime.now() - datetime.timedelta(minutes=n_minutes - 1)
+    dict_fail_password = dict.fromkeys(dict_password, date)
+    return dict_fail_password
 
 
 def main():
