@@ -1,16 +1,18 @@
 import datetime
-import time
 
 dict_password = {"a": "1111", "b": "2222", "c": "3333"}
 
 n_minutes = 5
 
 
-def authenticate() -> bool:
+def authenticate(date) -> bool:
     """
-
+    The function blocks the program for (n_minutes) minutes in case of incorrectly entered login
     :return: bool
     """
+    if date > datetime.datetime.now() - datetime.timedelta(minutes=n_minutes):
+        print(f"Вы заблокированы! Следующая попытка через {n_minutes} минут")
+        exit()
     return True
 
 
@@ -27,9 +29,9 @@ def check_password(username: str, password: str) -> bool:
 
 def decorator(func):
     def wrapper(user_main, password_main):
-        if not check_password(user_main, password_main):
+        if not authenticate(save_last_fail_login()):
             return False
-        if not authenticate():
+        if not check_password(user_main, password_main):
             return False
         return func(user_main, password_main)
 
@@ -80,33 +82,12 @@ def try_enter():
             break
 
 
-def check_date(date) -> bool:
-    """
-    The function compares the time of the last incorrectly entered login and the present time.
-    If more then (n_minutes) minutes have passed since the time of the last incorrectly entered login,
-    the function returns True. Otherwise, the function returns False.
-    :param date: date
-    :return: bool
-    """
-    return date < datetime.datetime.now() - datetime.timedelta(minutes=n_minutes)
-
-
 def save_last_fail_login():
     """
     The function saves the time of the last incorrectly entered login
     :return: datetime
     """
-    return datetime.datetime(day=9, month=2, year=2022, hour=20, minute=20)
-
-
-def user_blocking():
-    """
-    The function blocks the program for (n_minutes) minutes in case of incorrectly entered login
-    :return:
-    """
-    if not check_date(save_last_fail_login()):
-        print(f"Вы заблокированы! Следующая попытка через {n_minutes} минут")
-        time.sleep(60 * n_minutes)
+    return datetime.datetime.now() - datetime.timedelta(minutes=n_minutes - 1)
 
 
 def main():
@@ -116,8 +97,6 @@ def main():
     :return:
     """
     params = parse_args()
-
-    user_blocking()
 
     if login(params.username or input("Enter your name: "), params.password or input("Enter your password: ")) is True:
         print("Вы в системе!")
