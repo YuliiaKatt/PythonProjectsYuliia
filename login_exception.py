@@ -4,6 +4,22 @@ dict_password = {"a": "1111", "b": "2222", "c": "3333"}
 
 n_minutes = 5
 
+class UserDoesNotExist(Exception):
+    ...
+
+def check_password(username: str) -> bool:
+        """
+        The function returns True if the pair (username, password) matches the pair (key, value)
+        in the global dictionary.
+        :param username: str
+        :param password: str
+        :return: bool
+        """
+        try:
+            return dict_password[username]
+        except KeyError:
+            raise UserDoesNotExist
+
 
 def authenticate(user) -> bool:
     """
@@ -17,20 +33,11 @@ def authenticate(user) -> bool:
     return True
 
 
-def check_password(username: str, password: str) -> bool:
-    """
-    The function returns True if the pair (username, password) matches the pair (key, value)
-    in the global dictionary.
-    :param username: str
-    :param password: str
-    :return: bool
-    """
-    return (username, password) in dict_password.items()
-
-
 def decorator(func):
     def wrapper(user_main, password_main):
-        if not check_password(user_main, password_main):
+        try:
+            check_password(user_main)
+        except UserDoesNotExist:
             return False
         if not authenticate(user_main):
             return False
@@ -100,7 +107,6 @@ def main():
     :return:
     """
     params = parse_args()
-
     if login(params.username or input("Enter your name: "), params.password or input("Enter your password: ")) is True:
         print("Вы в системе!")
     else:
